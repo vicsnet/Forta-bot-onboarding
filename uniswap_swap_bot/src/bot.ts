@@ -25,19 +25,21 @@ import {
 
     const tokenSwapEvent = txEvent.filterLog(SWAP_EVENT, UNISWAP_ADDRESS);
     tokenSwapEvent.forEach((swapEvent)=>{
-        const {sender, recipent, deposit, output} = swapEvent.args;
+        const {sender, recipient, amount0, amount1} = swapEvent.args;
+    
+        console.log("deposit and output",amount0, amount1)
         findings.push(
             Finding.fromObject({
-                name: "swap occur",
-                description:`${deposit} was swap ${output}`,
+                name: "Swap detected",
+                description:`${Number(amount0)} was swap ${amount1}`,
                 alertId:'FORTA-1',
                 severity:FindingSeverity.Low,
                 type:FindingType.Info,
                 metadata:{
                     sender,
-                    recipent,
-                    deposit,
-                    output
+                    recipient,
+                    amount0: amount0.toString(),
+                    amount1:amount1.toString()
                 },
             })
         );
@@ -45,4 +47,8 @@ import {
     })
 
     return findings;
+  }
+
+  export default{
+    handleTransaction
   }
