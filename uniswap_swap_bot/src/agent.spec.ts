@@ -9,8 +9,8 @@ import {
 import { createAddress } from "forta-agent-tools";
 import { TestTransactionEvent } from "forta-agent-tools/lib/test";
 
-import agent, { swpaRouter, function_exact } from "./agent";
-import { UNISWAP_ADDRESS, SWAP_EVENT } from "./constant";
+import agent from "./agent";
+import { UNISWAP_ADDRESS, SWAP_EVENT, FUNCTION_EXACT, SWAP_ROUTER } from "./constant";
 
 describe("swap occur", () => {
   let handleTransaction: HandleTransaction;
@@ -62,10 +62,10 @@ describe("swap occur", () => {
       it("calls the function", async () => {
         const txEvent = new TestTransactionEvent()
           .setFrom(sender)
-          .setTo(String(swpaRouter))
+          .setTo(String(SWAP_ROUTER))
           .addTraces({
-            function: function_exact,
-            to: String(swpaRouter),
+            function: FUNCTION_EXACT,
+            to: String(SWAP_ROUTER),
             from: sender,
             arguments: [
               tokenIn,

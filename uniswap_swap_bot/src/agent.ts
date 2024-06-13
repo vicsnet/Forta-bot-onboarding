@@ -8,34 +8,12 @@ import {
 } from "forta-agent";
 
 
-import { UNISWAP_ADDRESS, SWAP_EVENT } from "./constant";
+import { UNISWAP_ADDRESS, SWAP_EVENT, FUNCTION_EXACT, SWAP_ROUTER, ABI } from "./constant";
 
-export const swpaRouter ="0xE592427A0AEce92De3Edee1F18E0157C05861564"
+import { getPool } from "./utils";
 
-export const  function_exact = " function exactInputSingle(address,address,uint24,address,uint256,uint256,uint256,uint160)"
 
-const ABI=[
-  {
-    "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint24", "name": "", "type": "uint24" }
-    ],
-    "name": "getPool",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-]
 
-export const getPool = (token1:String, token2:String, fee:Number) =>{
-  const provider = new ethers.providers.JsonRpcProvider('https://polygon.drpc.org')
-  const contract = new ethers.Contract(UNISWAP_ADDRESS, ABI, provider);
-
-  const poolAddress = contract.getPool(token1, token2, fee)
-
-  return poolAddress;
-}
 
 
 
@@ -46,7 +24,7 @@ const provideHandleTransaction = () => async (txEvent: TransactionEvent) => {
 
   const findings: Finding[] = [];
 
-  const functionCalls =  txEvent.filterFunction([function_exact], swpaRouter);
+  const functionCalls =  txEvent.filterFunction([FUNCTION_EXACT], SWAP_ROUTER );
   
   
   if(functionCalls.length === 0){
